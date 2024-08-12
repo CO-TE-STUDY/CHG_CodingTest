@@ -1,0 +1,39 @@
+#include <iostream>
+#include <algorithm>
+#include <queue>
+
+using namespace std;
+
+int mainCard()
+{
+	int CardCount, AddCount;
+	//int로 했다가 숫자가 너무 커져서 범위를 벗어나서 실패 했었음.
+	uint64_t result = 0;
+	cin >> CardCount >> AddCount;
+	priority_queue<uint64_t, vector<uint64_t>, greater<uint64_t>> CardQueue;
+
+	for (int i = 0; i < CardCount; i++)
+	{
+		int tmp;
+		cin >> tmp;
+		CardQueue.push(tmp);
+
+	}
+	for (int i = 0; i < AddCount; i++)
+	{
+		uint64_t tmp = CardQueue.top();
+		CardQueue.pop();
+		tmp += CardQueue.top();
+		CardQueue.pop();
+		CardQueue.push(tmp);
+		CardQueue.push(tmp);
+	}
+	while(!CardQueue.empty())
+	{
+		uint64_t tmp = CardQueue.top();
+		CardQueue.pop();
+		result += tmp;
+	}
+	cout << result;
+	return 0;
+}
