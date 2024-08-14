@@ -1,0 +1,83 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+	vector<pair<int, int>> Plan;
+	int count;
+	cin >> count;
+  //상담 일정 입력 받기.
+	for (int i = 0; i < count; i++)
+	{
+		int a, b;
+		cin >> a >> b;
+		Plan.push_back({ a, b });
+
+	}
+  // + 1을 해주는 이유: 일을 마친 다음날에 최고 수입을 저장하기 때문.
+	vector<int> DP(count + 1, 0);
+
+	for (int i = 0; i < count; i++)
+	{
+		int EndDay = i + Plan[i].first;
+
+    //0이 아닐 때만 
+		if (i != 0)
+		{
+      //이걸 해주는 이유가 DP의 가장 중요한 점. 이전에 저장해놓은 최대값을 항상 재활용 해야 함. 
+			DP[i] = max(DP[i - 1], DP[i]);
+		}
+    //이 if문을 여기에 놓는 이유: 31번째 줄은 최고값 활용을 위해 매번 실행되어야 함. if문을 맨 위에 놓았다가 틀림
+    //끝나는 날짜가 count보다 크다면: 즉 일을 마치고 하루 뒤에 저장하는데도 그보다 범위를 벗어났다면
+		if (EndDay > count) continue;
+    //끝나는 날짜의 최고수입과 오늘까지 일한 최고수입 + 오늘 일한 수당의 합 중 최대값을 저장
+		DP[EndDay] = max(DP[i] + Plan[i].second, DP[EndDay]);
+	}
+
+	sort(DP.begin(), DP.end(), greater<>());
+	cout << DP[0];
+
+	return 0;
+}
+
+//예시가 1부터 나와있으면 그냥 코딩도 1부터 하도록 하자. 헷갈려서 오래 걸렸음
+
+
+
+
+
+///간단한 버전
+
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+//int DP[1500001];
+//배열은 범위 초과 접근해도 오류가 안난다.
+
+int main23()
+{
+	int count, day, point;
+	cin >> count;
+
+	vector<int> DP(count + 2);
+	for (int i = 1; i <= count; i++)
+	{
+		cin >> day >> point;
+
+    //배열을 쓰면 이 if문이 필요가 없다. 범위 초과 오류가 안나서.
+		if (i + day <= count + 1)
+		{
+			DP[i + day] = max(DP[i + day], DP[i] + point);
+		}
+		//여기서는 최대값을 다음 인덱스에 미리 갱신해줌.
+		DP[i + 1] = max(DP[i], DP[i + 1]);
+	}
+	cout << DP[count + 1];
+	return 0;
+}
