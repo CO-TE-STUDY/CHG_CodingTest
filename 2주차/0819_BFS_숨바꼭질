@@ -20,6 +20,7 @@ int main()
 		int now = q.front();
 		q.pop();
 
+		//범위가 벗어난다면 조사하지 않음
 		if (now < 0 || now > 100000) continue;
 
 		if (now == k)
