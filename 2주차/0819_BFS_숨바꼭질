@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <iostream>
+#include <queue>
+
+using namespace std;
+
+int n, k;
+
+int MinValue[100001];
+
+
+int main()
+{
+	cin >> n >> k;
+
+	queue<int> q;
+	q.push(n);
+	while (!q.empty())
+	{
+		int now = q.front();
+		q.pop();
+
+		if (now < 0 || now > 100000) continue;
+
+		if (now == k)
+		{
+			cout << MinValue[now];
+			break;
+		}
+
+		//BFS의 장점: 이미 탐색한 곳은 다시 탐색하지 않는다. MinValue[now + 1]이 0이 아니라는 것은 이미 탐색했다는 의미이고, 시작지점에서 제일 가깝다는 의미이므로
+		//굳이 재조사 할 필요가 없다. 그리고 k와 n 중 누가 더 큰지 모르므로 최대값인 100000만 넘지 않으면 되도록 한다.
+
+		//실수: 범위 오류부터 확인하고 배열에 접근한다. 조사식 순서 바꿈
+		if (now + 1 <= 100000 && MinValue[now + 1] == 0)
+		{
+			MinValue[now + 1] = MinValue[now] + 1;
+			q.push(now + 1);
+
+		}
+		if (now - 1 >= 0 && MinValue[now - 1] == 0)
+		{
+			MinValue[now - 1] = MinValue[now] + 1;
+			q.push(now - 1);
+
+		}
+		if (now * 2 <= 100000 && MinValue[now * 2] == 0)
+		{
+			MinValue[now * 2] = MinValue[now] + 1;
+			q.push(now * 2);
+
+		}
+	}
+
+	return 0;
+}
