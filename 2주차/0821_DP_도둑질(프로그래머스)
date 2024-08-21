@@ -1,0 +1,39 @@
+//평소 풀었던 문제와 달랐던 점: 지금까지는 바로 이전 인덱스를 갱신하거나 바로 다음 인덱스를 갱신하는 거였는데 이 문제는 두칸을 건너뛴 자리와 비교하며 갱신한다.
+//인덱스 - 2를 사용하는 코드를 그냥 딱 보면 조사를 안하는 인덱스가 생기지 않을까 했는데 for문의 조건을 보면 무조건 마지막 인덱스까지 한번씩 조사한다. 여기서 -2의 의미는 배열에 접근하는 인덱스.
+//대신 배열 범위를 넘지 않는지 잘 확인. 벡터를 사용하는 문제도 있기 때문
+
+#include <string>
+#include <vector>
+#include <algorithm>
+
+
+using namespace std;
+
+
+int dp[1000000]; //0번째 집을 안 턴 경우
+int dp1[1000000]; //0번째 집을 턴 경우
+
+int solution(vector<int> money) {
+    int answer = 0;
+    
+    dp[0] = 0;
+    dp1[0] = money[0];
+    dp[1] = money[1];
+    dp1[1] = dp1[0];
+
+    
+    //0번째 집을 안 턴 경우
+    for(int house = 2; house < money.size(); house++)
+    {
+        //현재 위치 - 2
+        dp[house] = max(dp[house - 2] + money[house], dp[house - 1]);
+        
+    }
+    for(int house = 2; house < money.size() - 1; house++)
+    {
+        dp1[house] = max(dp1[house - 2] + money[house], dp1[house - 1]);
+        
+    }
+    
+    return max(dp[money.size() - 1], dp1[money.size() - 2]);
+}
