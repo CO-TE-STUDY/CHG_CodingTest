@@ -1,0 +1,37 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+long long solution(int n, vector<int> times) {
+    long long answer = 0;
+    sort(times.begin(), times.end());
+    long long min = 1;
+    long long max = n * (long long)times.back();
+    
+    
+    while(min <= max) // 같을 때도 무조건 수행하도록. 왜냐면 딱 그 값이 정답일 수 있으니까
+    {
+        long long avg = (min + max) / 2; //현재 범위의 중간 값. 밑 주석에서 탐색 시간으로 통일
+        long long tmp = 0;
+        //현재 탐색 시간동안 각 직원이 해결 할 수 있는 인원 수를 구하고 더한다.
+        for(auto i : times)
+        {
+            tmp += avg / (long long)i;
+        }
+        //현재 탐색하기로 한 시간내에 모든 직원이 해결할 수 있는 인원의 총 합보다 더 많이 할 수 있거나 수가 같다면 일단 답으로 갱신, 탐색 시간은 줄이기만 하면 되기 때문에 최대값을 중간값 - 1로 갱신.
+        if(tmp >= n)
+        {
+            answer = avg;
+            max = avg - 1;
+        }
+        //n명보다 조금 해결할 수 있다면 탐색 시간 자체를 늘려야 하기 때문에 최소값 증가. answer는 갱신하지 않는다.
+        else
+        {
+            min = avg + 1;
+        }
+    }
+    
+    return answer;
+}
