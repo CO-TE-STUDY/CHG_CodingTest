@@ -1,0 +1,57 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+vector<pair<int, int>> Road;
+
+int main()
+{
+
+	int n, len, a, b, remain, last = -1, result = 0, DirtRoad;
+	cin >> n >> len;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> a >> b;
+		Road.push_back({ a, b });
+	}
+	sort(Road.begin(), Road.end());
+	for (auto r : Road)
+	{
+		//first는 웅덩이가 시작하는 위치. 이전에 설치한 널빤지는 무시하고 무조건 웅덩이의 시작 위치를 구한다.
+		int first = r.first;
+		//기존에 설치한 널빤지의 마지막 위치가 첫번째 범위를 커버한다면
+		if (r.first <= last)
+		{
+			//두번째 범위까지 커버한다면 그냥 continue
+			if (r.second <= last) continue;
+			//DirtRoad는 만약 이전 널빤지가 존재한다면 그 바로 뒤부터 second까지의 길이이고
+			DirtRoad = r.second - (last + 1);
+			first = last + 1;
+		}
+		else
+		{
+			//이전 널빤지가 존재하지 않는다면 그냥 first부터 second까지의 길이.
+			DirtRoad = (r.second - r.first);
+		}
+
+		int div = DirtRoad / len;
+		if (DirtRoad % len == 0)
+		{
+			result += div;
+			continue;
+		}
+		result += div + 1;
+		//last 갱신이 필요한 경우는 널빤지를 딱 맞추지 않고 더 사용했을 경우이다.
+		last = first + ((div + 1) * len) - 1; //이렇게 해도 되고
+
+		//last = (r.second + (len - (DirtRoad % len)) - 1); //이렇게 해도 된다.
+		//널빤지가 사용된 최종 좌표를 구하는 공식은 위와 같다.
+		//len이 5이고 second의 위치가 12였고, 실제로 길이가 1이라면 4가 남는 것이기 때문에 12 + 4 = 16이지만 여기서 -1을 해주는 이유는
+		//두번째로 들어온 값은 실제 웅덩이의 + 1 좌표이기 때문.
+		
+	}
+	cout << result;
+	return 0;
+}
