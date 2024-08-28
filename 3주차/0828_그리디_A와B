@@ -1,0 +1,52 @@
+#include <string>
+#include <iostream>
+#include <algorithm>
+#include <map>
+
+
+
+using namespace std;
+
+bool IsFind = false;
+
+
+
+void func(string s, string target)
+{
+	if (target == s)
+	{
+		IsFind = true;
+	}
+	if (target.length() == 1)
+	{
+		return;
+	}
+	if (target[target.size() - 1] == 'A')
+	{
+		string tmp = target;
+		tmp.erase(tmp.begin() + tmp.size() - 1);
+		func(s, tmp);
+	}
+	if (target[target.size() - 1] == 'B')
+	{
+		string tmp = target;
+		tmp.erase(tmp.begin() + tmp.size() - 1);
+		reverse(tmp.begin(), tmp.end());
+		func(s, tmp);
+	}
+}
+int mainAandB()
+{
+	string s, t;
+	cin >> s >> t;
+
+	func(s, t);
+
+	if (IsFind)
+	{
+		cout << 1;
+	}
+	else cout << 0;
+
+	return 0;
+}
