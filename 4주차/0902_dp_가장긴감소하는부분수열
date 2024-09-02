@@ -1,0 +1,31 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int NLong, sum;
+int A[1001];
+
+//dp[1]은 인덱스 1을 최대 크기로 고려했을 때 감소하는 수열의 최대 길이
+int dpLong[1001];
+
+int main(void) {
+
+	cin >> NLong;
+	for (int i = 0; i < NLong; i++)
+		cin >> A[i];
+
+	//0부터 n까지 반복
+	for (int i = 0; i < NLong; i++) {
+		dpLong[i] = 1;
+
+		//i까지 한번 더 반복
+		for (int j = 0; j < i; j++) {				
+			if (A[i] < A[j]) {				
+				//만약 A[j]가 이전에 조사했던 같은 숫자라면 어차피 그 두 자리에 저장되는 최대 수열의 수는 같을거니까 괜찮다.
+				dpLong[i] = max(dpLong[i], dpLong[j] + 1);		
+			}
+		}
+		sum = max(sum, dpLong[i]);
+	}
+	cout << sum;
+}
