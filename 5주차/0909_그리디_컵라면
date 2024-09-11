@@ -26,7 +26,7 @@ int main()
 
 	sort(Info, Info + n, greater<>());
 	int j = 0;
-	for (int i = n; i > 0; i--) //여기서 0까지 조사해버리면 Info[j].first와 i가 계속 같아서 무한루프 빠질 거 같아서 안해봄
+	for (int i = n; i > 0; i--) //여기서 0까지 조사해버리면 (실패함) Info[j].first와 i가 계속 같아서 무한루프 빠질 듯
 	{
 		while (Info[j].first == i)
 		{
