@@ -1,0 +1,75 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+char RoadInfo[10000][500];
+bool IsVisit[10000][500];
+
+bool IsFindPath = false;
+
+
+int r, c, result = 0;//c가 가로, r이 세로
+
+bool DFS(int depth, int y, int x)
+{
+	
+	if (depth == c)
+	{
+		IsFindPath = true;
+		result += 1;
+		return true;
+	}
+
+	if (y - 1 >= 0 && x + 1 < c) //오른쪽 위
+	{
+		if (RoadInfo[y - 1][x + 1] == '.' && IsVisit[y - 1][x + 1] == false)
+		{
+			IsVisit[y - 1][x + 1] = true;
+			DFS(depth + 1, y - 1, x + 1);
+			if (IsFindPath) return true;
+		}
+	}
+	if (x + 1 < c)
+	{
+		if (RoadInfo[y][x + 1] == '.' && IsVisit[y][x + 1] == false)
+		{
+			IsVisit[y][x + 1] = true;
+			DFS(depth + 1, y, x + 1);
+			if (IsFindPath) return true;
+		}
+	}
+	if (y + 1 < r && x + 1 < c) //오른쪽 위
+	{
+		if (RoadInfo[y + 1][x + 1] == '.' && IsVisit[y + 1][x + 1] == false)
+		{
+			IsVisit[y + 1][x + 1] = true;
+			DFS(depth + 1, y + 1, x + 1);
+			if (IsFindPath) return true;
+		}
+	}
+
+
+	return false;
+}
+
+int main()
+{
+	
+	cin >> r >> c;
+	char d;
+	for (int i = 0; i < r; i++)
+	{
+		for (int j = 0; j < c; j++)
+		{
+			cin >> RoadInfo[i][j];
+		}
+	}
+	for (int start = 0; start < r; start++)
+	{
+		IsFindPath = false;
+		DFS(1, start, 0);
+	}
+
+	cout << result;
+	return 0;
+}
