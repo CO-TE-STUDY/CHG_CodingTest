@@ -1,0 +1,41 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int main()
+{
+	int N, C;
+	cin >> N >> C;
+	int* house = new int[N];
+	for (int i = 0; i < N; i++) {
+		cin >> house[i];
+	}
+	sort(house, house + N); //집 좌표 정렬
+
+	int ans = 0;
+	//집 사이 거리를 기준으로 이분탐색
+	int low = 1, high = house[N - 1] - house[0]; //high는 첫집부터 끝집까지의 거리 
+	while (low <= high) {
+		int mid = (low + high) / 2;   //mid 이상의 거리 떨어뜨려서 공유기 설치
+
+		int prev = house[0], cnt = 1; //prev는 이전에 공유기 설치한 집, cnt는 설치 개수
+		//매번 첫집에는 설치하고 시작
+		for (int i = 1; i < N; i++) {
+			if (house[i] - prev >= mid) {
+				cnt++;
+				prev = house[i];
+			}
+		}
+
+		//설치 대수 기준으로 업데이트
+		if (cnt >= C) {
+			ans = max(ans, mid);
+			low = mid + 1;
+		}
+		else high = mid - 1;
+
+	}
+
+	cout << ans << endl;
+	return 0;
+}
