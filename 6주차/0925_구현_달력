@@ -1,0 +1,78 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+    int len = 0; int height = 0; int answer = 0;
+    int sum[367]; memset(sum, 0, sizeof(sum));
+    int N; cin >> N;
+    for (int i = 0; i < N; i++) {
+        int s, e; cin >> s >> e;
+        sum[s]++; sum[e + 1]--;
+        //한자리 뒤에 -1을 해주는 이유: 종료일까지의 최대 높이를 구하기 위해서. 
+        //그 자리에 -를 해버리면 만약 그 자리에서 시작되는 새로운 일정이 있을 때 height을 한단계 높이는 계산을 하지 못함.
+    }
+    //그래서 366까지 한다.
+    for (int i = 1; i <= 366; i++) {
+        sum[i] += sum[i - 1];
+        //sum[i]가 0이라면 연속된 일정이 없다는 뜻. 직사각형 계산을 해주면 됨
+        if (sum[i] == 0) {
+            if (len == 0) { continue; }
+            answer += len * height;
+            len = 0; height = 0;
+        }
+        else {  //sum[i]가 0이 아니라면 아직 연속된 일정이 끝나지 않았다는 뜻.
+
+            //len이 0이라는 것은 새롭게 시작한 직사각형임
+            if (len == 0) {
+                len = 1; height = sum[i];
+            }
+            else {
+                len++; height = max(height, sum[i]);
+                //가로 길이를 더해주고, 높이를 최대값으로 맞춰준다. 누적합
+            }
+        }
+    }
+    cout << answer;
+
+}
+
+//복습
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int arr[367];
+
+int main()
+{
+	int n, a, b, result = 0;
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> a >> b;
+		arr[a]++; arr[b + 1]--;
+	}
+	int w = 0, h = 0;
+	for (int i = 1; i < 367; i++)
+	{
+		arr[i] += arr[i - 1];
+		if (arr[i] == 0)
+		{
+			result += w * h;
+			w = 0; h = 0;
+		}
+		else
+		{
+			w++;
+			h = max(h, arr[i]);
+		}
+	}
+	cout << result;
+	return 0;
+}
