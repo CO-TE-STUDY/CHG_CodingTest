@@ -1,0 +1,47 @@
+//파일 합치기랑 비슷함
+
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+pair<int, pair<int, int>> dpmmo[501][501];
+pair<int, int> mat[501];
+int mainMMO()
+{
+	int n;
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		int a, b;
+		cin >> a >> b;
+		//mat[i] = { a, b };
+		
+		dpmmo[i][i].second = { a, b };
+	}
+
+	for (int x = 1; x < n; x++)
+	{
+		for (int y = 0; y < n - x; y++)
+		{
+			//이걸 여기서 제일 큰 값으로 초기화해주고 중앙선을 나누면서 계속 작은 값으로 초기화해줌.
+			dpmmo[y][y + x].first = 987654321;
+			for (int z = y; z < y + x; z++)
+			{
+				pair<int, int> front = dpmmo[y][z].second;
+				pair<int, int> back = dpmmo[z + 1][y + x].second;
+				int sum = dpmmo[y][z].first + dpmmo[z + 1][y + x].first + (front.first * front.second * back.second); //괄호 안에 있는 게 새롭게 구한 숫자
+				//두 덩이를 합칠때는 각 덩이를 합쳐온 현재까지의 결과를 더한 값에 새로운 값을 더해야됨. 왜냐면 
+				//그게 새로운 경로가 될 수 있는 거임.
+				
+				if (dpmmo[y][y + x].first > sum)
+				{
+					dpmmo[y][y + x].first = sum; 
+					dpmmo[y][y + x].second = { front.first, back.second };
+				}
+			}
+		}
+	}
+	cout << dpmmo[0][n - 1].first;
+	return 0;
+}
