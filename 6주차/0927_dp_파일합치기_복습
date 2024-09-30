@@ -1,0 +1,47 @@
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int dpFile[501][501];
+
+int arrFile[501];
+
+int main()
+{
+
+	int n;
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		int c;
+		cin >> c;
+		for (int j = 0; j < c; j++)
+		{
+			cin >> arrFile[j];
+			
+		}
+
+		for (int x = 1; x < c; x++)
+		{
+			//조사할 구간 시작 지점
+			for (int y = 0; y < c - x; y++)
+			{
+				dpFile[y][y + x] = INT_MAX; //백준에서는 컴파일 에러 남 987654321로 제출
+				//조사할 구간의 합치는 비용 먼저 구하기
+				int FileSum = 0;
+				for (int h = y; h <= y + x; h++)
+				{
+					FileSum += arrFile[h];
+				}
+				//주사할 구간을 반으로 자를 구분 선
+				for (int z = 0; z < x; z++)
+				{
+					dpFile[y][y + x] = min(dpFile[y][y + x], dpFile[y][y + z] + dpFile[y + z + 1][y + x] + FileSum);
+				}
+			}
+		}
+		cout << dpFile[0][c - 1] << endl;
+	}
+	return 0;
+}
