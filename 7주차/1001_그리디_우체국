@@ -1,0 +1,42 @@
+#include <iostream>
+#include <algorithm>
+#include <math.h>
+
+using namespace std;
+
+pair<int, int> PostOffice[100000];
+
+int sumPO[100001];
+int mainPostOffice()
+{
+
+	int n;
+	long long total = 0;
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		int a, b;
+		cin >> a >> b;
+		PostOffice[i] = { a, b };
+		total += b;
+		//sumPO[i] = sumPO[i - 1] + PostOffice[i].second;
+	}
+	//문제 읽고서는 가장 최적의 자리를 찾으라길래 이진탐색으로 우체국이 위치할 수 있는 최적의 자리를 찾는 줄 알았음
+	//그래서 정답을 마을이 위치한 자리중에 하나로 제한시키면 안되는 줄 알았는데
+	//한명씩 산다고 가정 했을 때도 자리 차이가 가장 적게 나는 자리는 마을 위치 중 하나임. 새로 알게된 공식
+	
+	sort(PostOffice, PostOffice + n);
+	long long sum = 0;
+	for (int i = 0; i < n; i++)
+	{
+		sum += PostOffice[i].second;
+		if (sum >= (float)total / 2.f)
+		{
+			cout << PostOffice[i].first;
+			break;
+		}
+	}
+
+
+	return 0;
+}
